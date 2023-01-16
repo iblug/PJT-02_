@@ -15,15 +15,13 @@ def vote_average_movies():
         'region': 'KR'
     }
 
-    response = requests.get(BASE_URL+path, params=params).json()
-    data = response['results']
+    response = requests.get(BASE_URL+path, params=params)
+    # print(response.url)
+    data = response.json().get('results')
     
-    result = [i for i in data if i['vote_average'] >= 8]
-    # for i in data:
-    #   if i['vote_average'] >= 8:
-    #     result.append(i)
-
-    return result
+    movies_vote_average = [i for i in data if i.get('vote_average') >= 8]
+    
+    return movies_vote_average
     
 # 아래의 코드는 수정하지 않습니다.
 if __name__ == '__main__':

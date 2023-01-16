@@ -3,36 +3,34 @@ from pprint import pprint
 from dotenv import load_dotenv
 import os
 load_dotenv()
-key = os.getenv('key')
 
 def search_movie(title):
     pass
     # 여기에 코드를 작성합니다.
     
-    # BASE_URL = 'https://api.themoviedb.org/3'
-    # path = '/search/movie'
-    # params = { 
-    #     'api_id': key,
-    #     # 'language': 'ko-KR',
-    #     # 'region': 'KR',
-    #     'query' : f'{title}'
-    # }
-    # response = requests.get(BASE_URL+path, params=params).json()
-    
-    URL = f'https://api.themoviedb.org/3/search/movie?api_key={key}&language=ko-KR&region=KR&query={title}'
-    response = requests.get(URL).json()
-
+    BASE_URL = 'https://api.themoviedb.org/3'
+    path = '/search/movie'
+    params = { 
+        'api_key': os.getenv('key'),
+        'language': 'ko-KR',
+        'region': 'KR',
+        'query' : title
+    }
+    response = requests.get(BASE_URL+path, params=params).json()
+    # print(requests.get(BASE_URL+path, params=params).url)
     # print(response.url)
     # print(type(title))
-    data = response['results']
+    if response.get('total_results') == 0:
+        return None
 
-    result = data[0]['id'] if data else None
+    movie_id = response.get('results')[0].get('id')
+    # result = data
     # if data:
     #     result = data[0]['id']
     # else:
     #     return None
 
-    return result
+    return movie_id
 
 # 아래의 코드는 수정하지 않습니다.
 if __name__ == '__main__':

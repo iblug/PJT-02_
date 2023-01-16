@@ -3,33 +3,46 @@ from pprint import pprint
 from dotenv import load_dotenv
 import os
 load_dotenv()
-key = os.getenv('key')
 
 def recommendation(title):
     pass
     # 여기에 코드를 작성합니다.
-    
-    URL1 = f'https://api.themoviedb.org/3/search/movie?api_key={key}&query={title}&language=ko-KR&region=KR'
-
-    response1 = requests.get(URL1).json()
-    data1 = response1['results']
-
-    if data1:
-        result1 = data1[0]['id']
-    else:
+    BASE_URL = 'https://api.themoviedb.org/3'
+    path_search = '/search/movie'
+    params = {
+        'api_key': os.getenv('key'), 
+        'query': title, 
+        'language': 'ko-KR', 
+        'region': 'KR', 
+    }
+    response_search = requests.get(BASE_URL+path_search, params=params).json()
+    # print(requests.get(BASE_URL+search_path, params=params).url)
+    if response_search.get('total_results') == 0:
         return None
 
-    URL2 = f'https://api.themoviedb.org/3/movie/{result1}/recommendations?api_key={key}&language=ko-KR&region=KR'
 
-    response2 = requests.get(URL2).json()
-    data2 = response2['results']
+    movie_id = response_search.get('results')[0].get('id')
+
+
+    # if data1:
+    #     result1 = data1[0]['id']
+    # else:
+    #     return None
+
+    recom_path = f'/movie/{movie_id}/recommendations'
+    # URL2 = f'https://api.themoviedb.org/3/?api_key={key}&language=ko-KR&region=KR'
+
+    response_recom = requests.get(BASE_URL+recom_path, params=params).json()
+    # print(requests.get(BASE_URL+recom_path, params=params).url)
     
-    result2=[]
-    if data2:
-        for i in data2:
-            result2.append(i['title']) 
+    data = response_recom.get('results')
+    
+    movie_recommend=[]
+    if data:
+        for movie in data:
+            movie_recommend.append(movie.get('title')) 
 
-    return result2
+    return movie_recommend
 
 # 아래의 코드는 수정하지 않습니다.
 if __name__ == '__main__':

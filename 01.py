@@ -14,8 +14,11 @@ def popular_count():
         'region': 'KR'
     }
 
-    response = requests.get(BASE_URL+path, params=params).json()
-    data = response['results']
+    response = requests.get(BASE_URL+path, params=params)
+    # print(dir(response))
+    # print(response.url)
+    data = response.json().get('results')
+    # print(data)
     return len(data)
 
 # 아래의 코드는 수정하지 않습니다.

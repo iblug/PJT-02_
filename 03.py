@@ -16,12 +16,12 @@ def ranking():
     }
 
     response = requests.get(BASE_URL+path, params=params).json()
-    data = response['results']
+    data = response.get('results')
 
     
-    result = sorted(data, key=lambda x: x['vote_average'])[-5:]
+    movie_ranking = sorted(data, key=lambda x: x.get('vote_average'), reverse=True)[:5]
 
-    return result
+    return movie_ranking
 
 # 아래의 코드는 수정하지 않습니다.
 if __name__ == '__main__':
