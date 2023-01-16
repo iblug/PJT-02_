@@ -5,8 +5,6 @@ import os
 load_dotenv()
 
 def vote_average_movies():
-    pass 
-    # 여기에 코드를 작성합니다.  
     BASE_URL = 'https://api.themoviedb.org/3'
     path = '/movie/popular'
     params = {
@@ -15,11 +13,11 @@ def vote_average_movies():
         'region': 'KR'
     }
 
-    response = requests.get(BASE_URL+path, params=params)
-    # print(response.url)
-    data = response.json().get('results')
+    response = requests.get(BASE_URL+path, params=params).json
+    print(requests.get(BASE_URL+path, params=params).url)
+    data = response.get('results')
     
-    movies_vote_average = [i for i in data if i.get('vote_average') >= 8]
+    movies_vote_average = [movie for movie in data if movie.get('vote_average') >= 8]
     
     return movies_vote_average
     

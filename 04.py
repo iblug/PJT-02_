@@ -4,31 +4,19 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-def search_movie(title):
-    pass
-    # 여기에 코드를 작성합니다.
-    
+def search_movie(title):    
     BASE_URL = 'https://api.themoviedb.org/3'
     path = '/search/movie'
     params = { 
+        'query' : title,
         'api_key': os.getenv('key'),
         'language': 'ko-KR',
         'region': 'KR',
-        'query' : title
     }
+    
     response = requests.get(BASE_URL+path, params=params).json()
-    # print(requests.get(BASE_URL+path, params=params).url)
-    # print(response.url)
-    # print(type(title))
-    if response.get('total_results') == 0:
-        return None
 
-    movie_id = response.get('results')[0].get('id')
-    # result = data
-    # if data:
-    #     result = data[0]['id']
-    # else:
-    #     return None
+    movie_id = response.get('results')[0].get('id') if response.get('results') else None
 
     return movie_id
 

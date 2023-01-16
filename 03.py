@@ -5,8 +5,6 @@ import os
 load_dotenv()
 
 def ranking():
-    pass
-    # 여기에 코드를 작성합니다.
     BASE_URL = 'https://api.themoviedb.org/3'
     path = '/movie/popular'
     params = {
@@ -17,7 +15,6 @@ def ranking():
 
     response = requests.get(BASE_URL+path, params=params).json()
     data = response.get('results')
-
     
     movie_ranking = sorted(data, key=lambda x: x.get('vote_average'), reverse=True)[:5]
 

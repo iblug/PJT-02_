@@ -2,38 +2,26 @@ import requests
 from pprint import pprint
 from dotenv import load_dotenv
 import os
+search_module = __import__('04') # 04.py를 모듈화
 load_dotenv()
 
 def recommendation(title):
-    pass
-    # 여기에 코드를 작성합니다.
-    BASE_URL = 'https://api.themoviedb.org/3'
-    path_search = '/search/movie'
-    params = {
-        'api_key': os.getenv('key'), 
-        'query': title, 
-        'language': 'ko-KR', 
-        'region': 'KR', 
-    }
-    response_search = requests.get(BASE_URL+path_search, params=params).json()
-    # print(requests.get(BASE_URL+search_path, params=params).url)
-    if response_search.get('total_results') == 0:
+    # '04.py'의 search_movie 함수를 가져옴
+    movie_id = search_module.search_movie(title) 
+    
+    # movie_id가 None이면 None을 리턴
+    if not movie_id: 
         return None
 
-
-    movie_id = response_search.get('results')[0].get('id')
-
-
-    # if data1:
-    #     result1 = data1[0]['id']
-    # else:
-    #     return None
-
+    BASE_URL = 'https://api.themoviedb.org/3'
     recom_path = f'/movie/{movie_id}/recommendations'
-    # URL2 = f'https://api.themoviedb.org/3/?api_key={key}&language=ko-KR&region=KR'
+    params = {
+        'api_key': os.getenv('key'), 
+        'language': 'ko-KR', 
+        'region': 'KR', 
+    }    
 
     response_recom = requests.get(BASE_URL+recom_path, params=params).json()
-    # print(requests.get(BASE_URL+recom_path, params=params).url)
     
     data = response_recom.get('results')
     
